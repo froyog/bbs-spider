@@ -1,12 +1,14 @@
 from util import get_attach, save_file, logging
 import re
 
-
 class Spider:
-    def __init__(self, endId, offset=-50):
+    def __init__(self, endId, startId):
         self.endId = endId
-        self.initId = self.get_init_id(offset)
-        print(self.initId)
+        if startId:
+            self.initId = int(startId)
+        else:
+            print('reading init id from log')
+            self.initId = self.get_init_id(-50)
         self.rootUrl = 'https://bbs.tju.edu.cn/api/attach/'
 
     def get_init_id(self, offset):
@@ -39,6 +41,7 @@ class Spider:
             if logger:
                 logger.close()
 
-
-bbsSpider = Spider(70100)
+start_id = input('enter start id: (OPTIONAL)')
+end_id = input('enter end id: ')
+bbsSpider = Spider(int(end_id), start_id)
 bbsSpider.start()

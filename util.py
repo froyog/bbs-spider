@@ -4,6 +4,8 @@ from urllib.error import URLError
 import re
 import os
 import time
+import ssl
+context = ssl._create_unverified_context()
 
 def get_attach(url):
     print('try getting url %s' % url)
@@ -19,12 +21,12 @@ def get_attach(url):
     )
 
     try:
-        file = urllib.request.urlopen(url)
+        file = urllib.request.urlopen(url, context=context)
         disposition = get_disposition(file)
         if re.match(r'''.*(\.png|\.jpg|\.gif|\.bmp|\.mng|\.psd|\.jpeg|\.tiff|\.tif)$|
         (.*"image_android")|
         (.*=filename$)|
-        (.*=untitled$)''', disposition):
+        (.*=untitled$)''', disposition, re.IGNORECASE):
             # image
             return False
         else:
